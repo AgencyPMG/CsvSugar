@@ -104,7 +104,7 @@ $writer->writeRows([
 $writer = new DictWriter(
     '/path/to/file.csv',
     null, // dialect, see below
-    ['one', 'two', three'],
+    ['one', 'two', 'three'],
     DictWriter::ERROR_INVALID
 );
 $writer->writeRow([
