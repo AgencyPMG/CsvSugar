@@ -12,4 +12,4 @@
 
 $loader = require __DIR__.'/../vendor/autoload.php';
 
-$loader->addPsr4('PMG\\CrmTool\\', __DIR__);
+$loader->addPsr4('PMG\\CsvSugar\\', __DIR__);
