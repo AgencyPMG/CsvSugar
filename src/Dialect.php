@@ -52,17 +52,17 @@ final class Dialect
         return new self(',');
     }
 
-    public function tsv()
+    public static function tsv()
     {
         return new self("\t");
     }
 
-    public function tilde()
+    public static function tilde()
     {
         return new self('~');
     }
 
-    public function pipe()
+    public static function pipe()
     {
         return new self('|');
     }
