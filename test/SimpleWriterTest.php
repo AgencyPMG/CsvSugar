@@ -10,8 +10,12 @@
 
 namespace PMG\CsvSugar;
 
+use org\bovigo\vfs\vfsStream;
+
 class SimpleWriterTest extends TestCase
 {
+    private $fs;
+
     public static function dialects()
     {
         return [
@@ -27,42 +31,19 @@ class SimpleWriterTest extends TestCase
      */
     public function testWriteRowsProducesTheExpectedFile($expectedFile, $dialect)
     {
-        $file = tempnam(__DIR__.'/Fixtures/tmp', 'simplewriter_');
+        $file = vfsStream::url('home/simplewriter');
         $writer = new SimpleWriter($file, $dialect);
 
         $writer->writeRows([
             ['one', 'two'],
-            ['three', 'four'],
+            new \ArrayIterator(['three', 'four']),
         ]);
 
         $this->assertFileEquals(__DIR__.'/Fixtures/'.$expectedFile, $file);
-
-        @unlink($file);
     }
 
-    public static function notIterable()
+    protected function setUp()
     {
-        return [
-            [null],
-            [false],
-            [1],
-            [1.0],
-            [new \stdClass],
-        ];
-    }
-
-    /**
-     * @dataProvider notIterable
-     * @expectedException PMG\CsvSugar\Exception\InvalidArgumentException
-     */
-    public function testWriteRowsErrorWhenAnNonIterableIsPassedIn($rows)
-    {
-        $file = tempnam(__DIR__.'/Fixtures/tmp', 'simplewriter_');
-        $writer = new SimpleWriter($file);
-        try {
-            $writer->writeRows($rows);
-        } finally {
-            @unlink($file);
-        }
+        $this->fs = vfsStream::setup('home');
     }
 }
