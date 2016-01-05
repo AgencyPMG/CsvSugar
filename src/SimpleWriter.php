@@ -15,7 +15,7 @@ namespace PMG\CsvSugar;
  *
  * @since 1.0
  */
-final class SimpleWriter implements Writer
+final class SimpleWriter extends AbstractWriter
 {
     use Configuration;
 
@@ -51,22 +51,5 @@ final class SimpleWriter implements Writer
         }
 
         $this->fileObject->fputcsv(is_array($row) ? $row : [$row]);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function writeRows($rows)
-    {
-        if (!is_array($rows) && !$rows instanceof \Traversable) {
-            throw new Exception\InvalidArgumentException(sprintf(
-                'writeRows expects an array or Traversable, got "%s"',
-                is_object($rows) ? get_class($rows) : gettype($rows)
-            ));
-        }
-
-        foreach ($rows as $row) {
-            $this->writeRow($row);
-        }
     }
 }
