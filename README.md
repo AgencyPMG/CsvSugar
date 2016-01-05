@@ -81,7 +81,11 @@ $writer->writeRows(makeRows());
 
 // or use a dict writer to only output certain fields.
 
-$writer = new DictWriter('/path/to/file.csv', ['one', 'two', 'three']);
+$writer = new DictWriter(
+    '/path/to/file.csv',
+    null, // dialect, see below
+    ['one', 'two', 'three']
+);
 $writer->writeHeader(); // output the column names
 $writer->writeRow([
     'one' => 1,
