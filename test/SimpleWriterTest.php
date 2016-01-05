@@ -36,10 +36,41 @@ class SimpleWriterTest extends TestCase
 
         $writer->writeRows([
             ['one', 'two'],
-            new \ArrayIterator(['three', 'four']),
+            ['three', 'four'],
         ]);
 
         $this->assertFileEquals(__DIR__.'/Fixtures/'.$expectedFile, $file);
+    }
+
+    public function testNonArrayRowsAreConvertedToArraysAndWritten()
+    {
+        $file = vfsStream::url('home/simplewriter_nonarray');
+        $writer = new SimpleWriter($file);
+
+        $writer->writeRow('one');
+
+        $this->assertEquals("one\n", file_get_contents($file));
+    }
+
+    public function rows()
+    {
+        return [
+            'array' => [['one', 'two']],
+            'traversable' => [new \ArrayIterator(['one', 'two'])],
+        ];
+    }
+
+    /**
+     * @dataProvider rows
+     */
+    public function testWriteRowAcceptsAnIteratorOrAnArray($row)
+    {
+        $file = vfsStream::url('home/simplewriter_writerow');
+        $writer = new SimpleWriter($file, Dialect::csv());
+
+        $writer->writeRow($row);
+
+        $this->assertEquals("one,two\n", file_get_contents($file));
     }
 
     protected function setUp()
