@@ -20,7 +20,7 @@ interface Writer
     /**
      * Write a single row of CSV to the the file.
      *
-     * @param array|Traversable $row The row to write.
+     * @param mixed $row The row to write.
      * @throws InvalidArgumentException if $row is not an array or Traversable
      * @return void
      */

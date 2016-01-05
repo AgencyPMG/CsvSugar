@@ -43,6 +43,7 @@ final class SimpleWriter extends AbstractWriter
 
     /**
      * {@inheritdoc}
+     * @param array|Traversable $row The row to write
      */
     public function writeRow($row)
     {
