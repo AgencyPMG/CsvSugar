@@ -45,7 +45,7 @@ $reader = new DictReader(
   null, // dialect, see below
   ['one', 'two', 'three'], // fields
   '_extra_columns', // rest key
-  'missing', // reset value
+  'missing', // rest value
 )
 */
 
