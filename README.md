@@ -1,5 +1,7 @@
 # CSV Sugar
 
+[![Build Status](https://travis-ci.org/AgencyPMG/CsvSugar.svg)](https://travis-ci.org/AgencyPMG/CsvSugar)
+
 A few helpers to make reading and writing CSV (and other delimited files)
 a bit easier.
 
