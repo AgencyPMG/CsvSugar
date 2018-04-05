@@ -125,4 +125,19 @@ class DictReaderTest extends TestCase
             'two' => 2,
         ]], iterator_to_array($reader));
     }
+
+    public function testReaderCanBeUsedMoreThanOnce()
+    {
+        $reader = DictReader::builder(__DIR__.'/Fixtures/dictreader.csv')->build();
+
+        foreach ($reader as $row) {
+            // once
+        }
+
+        // twice
+        $this->assertEquals([[
+            'one' => 1,
+            'two' => 2,
+        ]], iterator_to_array($reader));
+    }
 }

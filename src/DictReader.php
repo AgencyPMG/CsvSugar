@@ -41,7 +41,8 @@ final class DictReader extends AbstractReader
     protected function readFile($fh) : iterable
     {
         $fh = $this->openFile();
-        $colCount = $this->fields ? count($this->fields) : null;
+        $fields = $this->fields ?: null;
+        $colCount = $fields ? count($fields) : null;
         $delim = $this->getDelimiter();
         $enclose = $this->getEnclosure();
         $esc = $this->getEscapeCharacter();
@@ -56,15 +57,15 @@ final class DictReader extends AbstractReader
             }
 
             // no fields set up? Then use the first line in the file
-            if (null === $this->fields) {
-                $this->fields = $row;
-                $colCount = count($this->fields);
+            if (null === $fields) {
+                $fields = $row;
+                $colCount = count($fields);
                 continue;
             }
 
             list($_row, $extras) = $this->normalizeRow($row, $colCount);
 
-            $out = array_combine($this->fields, $_row);
+            $out = array_combine($fields, $_row);
             if (null !== $this->restKey) {
                 $out[$this->restKey] = $extras;
             }
@@ -75,8 +76,13 @@ final class DictReader extends AbstractReader
 
     private function normalizeRow(array $row, $colCount)
     {
-        while (count($row) < $colCount) {
-            $row[] = $this->restValue;
+        $rc = count($row);
+        if ($rc < $colCount) {
+            $row = array_merge($row, array_fill(
+                0,
+                $colCount - $rc,
+                $this->restValue
+            ));
         }
 
         return [array_slice($row, 0, $colCount), array_slice($row, $colCount)];

@@ -59,4 +59,19 @@ class SimpleReaderTest extends TestCase
         foreach ($reader as $row) {
         }
     }
+
+    public function testReaderCanBeUsedMoreThanOnce()
+    {
+        $reader = new SimpleReader(__DIR__.'/Fixtures/simple.csv');
+
+        foreach ($reader as $row) {
+            // once
+        }
+
+        // twice
+        $this->assertEquals([
+            ['one', 'two'],
+            ['three', 'four'],
+        ], iterator_to_array($reader));
+    }
 }
