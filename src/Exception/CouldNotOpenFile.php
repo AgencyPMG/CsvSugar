@@ -8,8 +8,11 @@
  * file that was distributed with this source code.
  */
 
-namespace PMG\CsvSugar;
+namespace PMG\CsvSugar\Exception;
 
-abstract class TestCase extends \PHPUnit\Framework\TestCase
+use PMG\CsvSugar\CsvException;
+
+final class CouldNotOpenFile extends RuntimeException
 {
+
 }

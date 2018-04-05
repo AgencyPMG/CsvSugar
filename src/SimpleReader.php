@@ -23,8 +23,22 @@ final class SimpleReader extends AbstractReader
     public function getIterator()
     {
         $fh = $this->openFile();
-        foreach ($fh as $line) {
-            yield $line;
+        $delim = $this->getDelimiter();
+        $enclose = $this->getEnclosure();
+        $esc = $this->getEscapeCharacter();
+        try {
+            while (true) {
+                $line = fgetcsv($fh, 0, $delim, $enclose, $esc);
+                if (false === $line) {
+                    break;
+                }
+                if (self::isEmptyLine($line)) {
+                    continue;
+                }
+                yield $line;
+            }
+        } finally {
+            @fclose($fh);
         }
     }
 }

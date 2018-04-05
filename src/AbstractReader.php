@@ -17,9 +17,6 @@ namespace PMG\CsvSugar;
  */
 abstract class AbstractReader implements \IteratorAggregate, Reader
 {
-    use Configuration;
-    use Opener;
-
     /**
      * @var string
      */
@@ -41,17 +38,38 @@ abstract class AbstractReader implements \IteratorAggregate, Reader
         return $this->dialect;
     }
 
+    protected function getDelimiter() : string
+    {
+        return $this->getDialect()->getDelimiter();
+    }
+
+    protected function getEnclosure() : string
+    {
+        return $this->getDialect()->getEnclosure();
+    }
+
+    protected function getEscapeCharacter() : string
+    {
+        return $this->getDialect()->getEscapeCharacter();
+    }
+
     protected function openFile()
     {
-        $fh = $this->createFileObject($this->filename, 'r');
-        $fh->setFlags(
-            \SplFileObject::DROP_NEW_LINE |
-            \SplFileObject::READ_AHEAD |
-            \SplFileObject::SKIP_EMPTY |
-            \SplFileObject::READ_CSV
-        );
-        self::configureFileObject($fh, $this->getDialect());
+        $fh = @fopen($this->filename, 'r');
+        if (false === $fh) {
+            $err = error_get_last();
+            throw new Exception\CouldNotOpenFile(sprintf(
+                'Could not open "%s" for reading: %s',
+                $this->filename,
+                isset($err['message']) ? $err['message'] : 'unknown error'
+            ));
+        }
 
         return $fh;
+    }
+
+    protected static function isEmptyLine($line) : bool
+    {
+        return [null] === $line;
     }
 }

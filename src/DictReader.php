@@ -41,22 +41,38 @@ final class DictReader extends AbstractReader
     {
         $fh = $this->openFile();
         $colCount = $this->fields ? count($this->fields) : null;
-        foreach ($fh as $row) {
-            // no fields set up? Then use the first line in the file
-            if (null === $this->fields) {
-                $this->fields = $row;
-                $colCount = count($this->fields);
-                continue;
+        $delim = $this->getDelimiter();
+        $enclose = $this->getEnclosure();
+        $esc = $this->getEscapeCharacter();
+        try {
+            while (true) {
+                $row = fgetcsv($fh, 0, $delim, $enclose, $esc);
+                if (false === $row) {
+                    break;
+                }
+
+                if (self::isEmptyLine($row)) {
+                    continue;
+                }
+
+                // no fields set up? Then use the first line in the file
+                if (null === $this->fields) {
+                    $this->fields = $row;
+                    $colCount = count($this->fields);
+                    continue;
+                }
+
+                list($_row, $extras) = $this->normalizeRow($row, $colCount);
+
+                $out = array_combine($this->fields, $_row);
+                if (null !== $this->restKey) {
+                    $out[$this->restKey] = $extras;
+                }
+
+                yield $out;
             }
-
-            list($_row, $extras) = $this->normalizeRow($row, $colCount);
-
-            $out = array_combine($this->fields, $_row);
-            if (null !== $this->restKey) {
-                $out[$this->restKey] = $extras;
-            }
-
-            yield $out;
+        } finally {
+            fclose($fh);
         }
     }
 

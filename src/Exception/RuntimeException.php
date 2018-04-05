@@ -12,7 +12,7 @@ namespace PMG\CsvSugar\Exception;
 
 use PMG\CsvSugar\CsvException;
 
-final class RuntimeException extends \RuntimeException implements CsvException
+class RuntimeException extends \RuntimeException implements CsvException
 {
 
 }
