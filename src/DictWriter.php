@@ -1,4 +1,5 @@
-<?php
+<?php declare(strict_types=1);
+
 /*
  * This file is part of pmg/csv-sugar.
  *
@@ -52,7 +53,7 @@ final class DictWriter extends AbstractWriter
      * @param array $headers The CSV file headers
      * @param int $invalidBehavior What to do with invalid columns
      */
-    public function __construct($file, Dialect $dialect=null, array $fields, $errorBehavior=self::IGNORE_INVALID, $restValue='')
+    public function __construct($file, Dialect $dialect=null, array $fields, int $errorBehavior=self::IGNORE_INVALID, $restValue='')
     {
         $this->writer = new SimpleWriter($file, $dialect);
         $this->fields = array_fill_keys(array_values($fields), true);
@@ -60,7 +61,7 @@ final class DictWriter extends AbstractWriter
         $this->restValue = $restValue;
     }
 
-    public static function builder($file)
+    public static function builder($file) : Builder\DictWriterBuilder
     {
         return new Builder\DictWriterBuilder($file);
     }
@@ -71,7 +72,7 @@ final class DictWriter extends AbstractWriter
      *
      * @return void
      */
-    public function writeHeader()
+    public function writeHeader() : void
     {
         $this->writer->writeRow(array_keys($this->fields));
     }
@@ -80,7 +81,7 @@ final class DictWriter extends AbstractWriter
      * {@inheritdoc}
      * @param array|ArrayAccess $row The row to write
      */
-    public function writeRow($row)
+    public function writeRow($row) : void
     {
         if (!is_array($row) && !$row instanceof \ArrayAccess) {
             throw new Exception\InvalidArgumentException(sprintf(
@@ -91,13 +92,13 @@ final class DictWriter extends AbstractWriter
         }
 
         if (self::ERROR_INVALID === $this->errorBehavior) {
-            $this->assureValidRow($row);
+            $this->assertValidRow($row);
         }
 
         $this->writer->writeRow($this->cleanRow($row));
     }
 
-    private function assureValidRow($row)
+    private function assertValidRow($row)  : void
     {
         $invalid = array_diff_key($row, $this->fields);
         if ($invalid) {
@@ -105,7 +106,7 @@ final class DictWriter extends AbstractWriter
         }
     }
 
-    private function cleanRow($row)
+    private function cleanRow($row) : array
     {
         $out = [];
         foreach ($this->fields as $key => $_) {

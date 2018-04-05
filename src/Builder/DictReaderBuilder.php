@@ -1,4 +1,5 @@
-<?php
+<?php declare(strict_types=1);
+
 /*
  * This file is part of pmg/csv-sugar.
  *
@@ -21,13 +22,13 @@ final class DictReaderBuilder extends DictBuilder
 {
     private $restKey = null;
 
-    public function withRestKey($key)
+    public function withRestKey(?string $key)
     {
         $this->restKey = $key;
         return $this;
     }
 
-    public function build()
+    public function build() : DictReader
     {
         return new DictReader(
             $this->filename,

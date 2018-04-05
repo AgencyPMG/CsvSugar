@@ -1,4 +1,5 @@
-<?php
+<?php declare(strict_types=1);
+
 /*
  * This file is part of pmg/csv-sugar.
  *
@@ -19,15 +20,15 @@ use PMG\CsvSugar\DictWriter;
  */
 final class DictWriterBuilder extends DictBuilder
 {
-    private $errorBehavior;
+    private $errorBehavior = DictWriter::IGNORE_INVALID;
 
-    public function withErrorBehavior($behavior)
+    public function withErrorBehavior(int $behavior)
     {
         $this->errorBehavior = $behavior;
         return $this;
     }
 
-    public function build()
+    public function build() : DictWriter
     {
         return new DictWriter(
             $this->filename,

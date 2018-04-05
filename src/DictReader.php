@@ -1,4 +1,5 @@
-<?php
+<?php declare(strict_types=1);
+
 /*
  * This file is part of pmg/csv-sugar.
  *
@@ -21,7 +22,7 @@ final class DictReader extends AbstractReader
     private $restKey;
     private $restValue;
 
-    public function __construct($filename, Dialect $dialect=null, array $fields=null, $restKey=null, $restValue=null)
+    public function __construct(string $filename, Dialect $dialect=null, array $fields=null, string $restKey=null, $restValue=null)
     {
         parent::__construct($filename, $dialect);
         $this->fields = $fields ?: null; // we want any empty value to be `null`
@@ -29,7 +30,7 @@ final class DictReader extends AbstractReader
         $this->restValue = $restValue;
     }
 
-    public static function builder($filename)
+    public static function builder($filename) : Builder\DictReaderBuilder
     {
         return new Builder\DictReaderBuilder($filename);
     }
@@ -37,7 +38,7 @@ final class DictReader extends AbstractReader
     /**
      * {@inheritdoc}
      */
-    protected function readFile($fh)
+    protected function readFile($fh) : iterable
     {
         $fh = $this->openFile();
         $colCount = $this->fields ? count($this->fields) : null;

@@ -1,4 +1,5 @@
-<?php
+<?php declare(strict_types=1);
+
 /*
  * This file is part of pmg/csv-sugar.
  *
@@ -22,9 +23,8 @@ interface Writer
      *
      * @param mixed $row The row to write.
      * @throws InvalidArgumentException if $row is not an array or Traversable
-     * @return void
      */
-    public function writeRow($row);
+    public function writeRow($row) : void;
 
     /**
      * Write multiple rows to the file. Useful if you want to pass in something
@@ -33,9 +33,8 @@ interface Writer
      * Warning: this will consume a iterator if give one. Dangerous for stuff like
      * generators.
      *
-     * @param array[]|Traversable[] $rows A set of rows to write
+     * @param $rows A set of rows to write
      * @throws InvalidArgumentException if $rows is not an array or traversable
-     * @return void
      */
-    public function writeRows($rows);
+    public function writeRows(iterable $rows) : void;
 }

@@ -14,27 +14,6 @@ class AbstractWriterTest extends TestCase
 {
     private $writer;
 
-
-    public static function notIterable()
-    {
-        return [
-            [null],
-            [false],
-            [1],
-            [1.0],
-            [new \stdClass],
-        ];
-    }
-
-    /**
-     * @dataProvider notIterable
-     * @expectedException PMG\CsvSugar\Exception\InvalidArgumentException
-     */
-    public function testWriteRowsErrorWhenAnNonIterableIsPassedIn($rows)
-    {
-        $this->writer->writeRows($rows);
-    }
-
     public static function iterable()
     {
         return [

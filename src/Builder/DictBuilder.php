@@ -1,4 +1,5 @@
-<?php
+<?php declare(strict_types=1);
+
 /*
  * This file is part of pmg/csv-sugar.
  *
@@ -24,7 +25,7 @@ abstract class DictBuilder
     protected $fields = null;
     protected $restValue = null;
 
-    public function __construct($filename)
+    public function __construct(string $filename)
     {
         $this->filename = $filename;
     }
@@ -46,6 +47,4 @@ abstract class DictBuilder
         $this->restValue = $value;
         return $this;
     }
-
-    abstract public function build();
 }

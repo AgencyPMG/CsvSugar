@@ -1,4 +1,5 @@
-<?php
+<?php declare(strict_types=1);
+
 /*
  * This file is part of pmg/csv-sugar.
  *
@@ -27,7 +28,7 @@ abstract class AbstractReader implements \IteratorAggregate, Reader
      */
     private $dialect;
 
-    public function __construct($filename, Dialect $dialect=null)
+    public function __construct(string $filename, Dialect $dialect=null)
     {
         $this->filename = $filename;
         $this->dialect = $dialect ?: Dialect::csv();
@@ -48,9 +49,9 @@ abstract class AbstractReader implements \IteratorAggregate, Reader
      *
      * @param resource $fh;
      */
-    abstract protected function readFile($fh);
+    abstract protected function readFile($fh) : iterable;
 
-    protected function getDialect()
+    protected function getDialect() : Dialect
     {
         return $this->dialect;
     }
@@ -75,6 +76,7 @@ abstract class AbstractReader implements \IteratorAggregate, Reader
         $fh = @fopen($this->filename, 'r');
         if (false === $fh) {
             $err = error_get_last();
+            error_clear_last();
             throw new Exception\CouldNotOpenFile(sprintf(
                 'Could not open "%s" for reading: %s',
                 $this->filename,

@@ -1,4 +1,5 @@
-<?php
+<?php declare(strict_types=1);
+
 /*
  * This file is part of pmg/csv-sugar.
  *
@@ -49,7 +50,7 @@ final class SimpleWriter extends AbstractWriter
      * {@inheritdoc}
      * @param array|Traversable $row The row to write
      */
-    public function writeRow($row)
+    public function writeRow($row) : void
     {
         if ($row instanceof \Traversable) {
             $row = iterator_to_array($row);
