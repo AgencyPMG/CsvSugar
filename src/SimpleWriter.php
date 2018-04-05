@@ -36,7 +36,11 @@ final class SimpleWriter extends AbstractWriter
      */
     public function __construct($file, Dialect $dialect=null)
     {
-        $this->fileObject = $file instanceof \SplFileObject ? $file : new \SplFileObject($file, 'w');
+        try {
+            $this->fileObject = $file instanceof \SplFileObject ? $file : new \SplFileObject($file, 'w');
+        } catch (\RuntimeException $e) {
+            throw Exception\CouldNotOpenFile::wrap($e);
+        }
         $this->dialect = $dialect ?: Dialect::csv();
         self::configureFileObject($this->fileObject, $this->dialect);
     }

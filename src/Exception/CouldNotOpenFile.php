@@ -14,5 +14,8 @@ use PMG\CsvSugar\CsvException;
 
 final class CouldNotOpenFile extends RuntimeException
 {
-
+    public static function wrap(\Throwable $e) : self
+    {
+        return new self($e->getMessage(), $e->getCode(), $e);
+    }
 }
