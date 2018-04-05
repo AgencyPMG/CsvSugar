@@ -33,6 +33,23 @@ abstract class AbstractReader implements \IteratorAggregate, Reader
         $this->dialect = $dialect ?: Dialect::csv();
     }
 
+    public function getIterator() : iterable
+    {
+        $fh = $this->openFile();
+        try {
+            return $this->readFile($fh);
+        } finally {
+            @fclose($fh);
+        }
+    }
+
+    /**
+     * Actually read the file from its resource handle
+     *
+     * @param resource $fh;
+     */
+    abstract protected function readFile($fh);
+
     protected function getDialect()
     {
         return $this->dialect;

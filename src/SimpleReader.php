@@ -20,25 +20,21 @@ final class SimpleReader extends AbstractReader
     /**
      * {@inheritdoc}
      */
-    public function getIterator()
+    protected function readFile($fh) : iterable
     {
         $fh = $this->openFile();
         $delim = $this->getDelimiter();
         $enclose = $this->getEnclosure();
         $esc = $this->getEscapeCharacter();
-        try {
-            while (true) {
-                $line = fgetcsv($fh, 0, $delim, $enclose, $esc);
-                if (false === $line) {
-                    break;
-                }
-                if (self::isEmptyLine($line)) {
-                    continue;
-                }
-                yield $line;
+        while (true) {
+            $line = fgetcsv($fh, 0, $delim, $enclose, $esc);
+            if (false === $line) {
+                break;
             }
-        } finally {
-            @fclose($fh);
+            if (self::isEmptyLine($line)) {
+                continue;
+            }
+            yield $line;
         }
     }
 }
