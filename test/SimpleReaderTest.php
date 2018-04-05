@@ -10,6 +10,8 @@
 
 namespace PMG\CsvSugar;
 
+use PMG\CsvSugar\Exception\CouldNotOpenFile;
+
 class SimpleReaderTest extends TestCase
 {
     public static function dialects()
@@ -35,5 +37,41 @@ class SimpleReaderTest extends TestCase
             ['one', 'two'],
             ['three', 'four'],
         ], $rows);
+    }
+
+    public function testEmptyLinesAreNotIncludedInTheOutput()
+    {
+        $reader = new SimpleReader(__DIR__.'/Fixtures/simple_with_empties.csv', Dialect::csv());
+
+        $rows = iterator_to_array($reader);
+
+        $this->assertEquals([
+            ['one', 'two'],
+            ['three', 'four'],
+        ], $rows);
+    }
+
+    public function testReaderErrorsWhenTheFileCannotBeOpened()
+    {
+        $this->expectException(CouldNotOpenFile::class);
+        $reader = new SimpleReader(__DIR__.'/does/not/exist');
+
+        foreach ($reader as $row) {
+        }
+    }
+
+    public function testReaderCanBeUsedMoreThanOnce()
+    {
+        $reader = new SimpleReader(__DIR__.'/Fixtures/simple.csv');
+
+        foreach ($reader as $row) {
+            // once
+        }
+
+        // twice
+        $this->assertEquals([
+            ['one', 'two'],
+            ['three', 'four'],
+        ], iterator_to_array($reader));
     }
 }

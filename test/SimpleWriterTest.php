@@ -11,6 +11,7 @@
 namespace PMG\CsvSugar;
 
 use org\bovigo\vfs\vfsStream;
+use PMG\CsvSugar\Exception\CouldNotOpenFile;
 
 class SimpleWriterTest extends TestCase
 {
@@ -71,6 +72,12 @@ class SimpleWriterTest extends TestCase
         $writer->writeRow($row);
 
         $this->assertEquals("one,two\n", file_get_contents($file));
+    }
+
+    public function testWritersCannotBeCreatedWithUnwriteableFiles()
+    {
+        $this->expectException(CouldNotOpenFile::class);
+        $writer = new SimpleWriter(__DIR__.'/does/not/exist');
     }
 
     protected function setUp()

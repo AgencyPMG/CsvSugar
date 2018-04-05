@@ -1,4 +1,5 @@
-<?php
+<?php declare(strict_types=1);
+
 /*
  * This file is part of pmg/csv-sugar.
  *
@@ -20,10 +21,20 @@ final class SimpleReader extends AbstractReader
     /**
      * {@inheritdoc}
      */
-    public function getIterator()
+    protected function readFile($fh) : iterable
     {
         $fh = $this->openFile();
-        foreach ($fh as $line) {
+        $delim = $this->getDelimiter();
+        $enclose = $this->getEnclosure();
+        $esc = $this->getEscapeCharacter();
+        while (true) {
+            $line = fgetcsv($fh, 0, $delim, $enclose, $esc);
+            if (false === $line) {
+                break;
+            }
+            if (self::isEmptyLine($line)) {
+                continue;
+            }
             yield $line;
         }
     }

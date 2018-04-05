@@ -1,4 +1,5 @@
-<?php
+<?php declare(strict_types=1);
+
 /*
  * This file is part of pmg/csv-sugar.
  *
@@ -17,9 +18,6 @@ namespace PMG\CsvSugar;
  */
 abstract class AbstractReader implements \IteratorAggregate, Reader
 {
-    use Configuration;
-    use Opener;
-
     /**
      * @var string
      */
@@ -30,28 +28,67 @@ abstract class AbstractReader implements \IteratorAggregate, Reader
      */
     private $dialect;
 
-    public function __construct($filename, Dialect $dialect=null)
+    public function __construct(string $filename, Dialect $dialect=null)
     {
         $this->filename = $filename;
         $this->dialect = $dialect ?: Dialect::csv();
     }
 
-    protected function getDialect()
+    public function getIterator() : iterable
+    {
+        $fh = $this->openFile();
+        try {
+            return $this->readFile($fh);
+        } finally {
+            @fclose($fh);
+        }
+    }
+
+    /**
+     * Actually read the file from its resource handle
+     *
+     * @param resource $fh;
+     */
+    abstract protected function readFile($fh) : iterable;
+
+    protected function getDialect() : Dialect
     {
         return $this->dialect;
     }
 
+    protected function getDelimiter() : string
+    {
+        return $this->getDialect()->getDelimiter();
+    }
+
+    protected function getEnclosure() : string
+    {
+        return $this->getDialect()->getEnclosure();
+    }
+
+    protected function getEscapeCharacter() : string
+    {
+        return $this->getDialect()->getEscapeCharacter();
+    }
+
     protected function openFile()
     {
-        $fh = $this->createFileObject($this->filename, 'r');
-        $fh->setFlags(
-            \SplFileObject::DROP_NEW_LINE |
-            \SplFileObject::READ_AHEAD |
-            \SplFileObject::SKIP_EMPTY |
-            \SplFileObject::READ_CSV
-        );
-        self::configureFileObject($fh, $this->getDialect());
+        $fh = @fopen($this->filename, 'r');
+        if (false === $fh) {
+            $err = error_get_last();
+            error_clear_last();
+            throw new Exception\CouldNotOpenFile(sprintf(
+                'Could not open "%s" for reading: %s',
+                $this->filename,
+                isset($err['message']) ? $err['message'] : 'unknown error'
+            ));
+        }
 
         return $fh;
+    }
+
+    protected static function isEmptyLine($line) : bool
+    {
+        return [null] === $line;
     }
 }

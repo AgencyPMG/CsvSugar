@@ -1,4 +1,5 @@
-<?php
+<?php declare(strict_types=1);
+
 /*
  * This file is part of pmg/csv-sugar.
  *
@@ -20,16 +21,8 @@ abstract class AbstractWriter implements Writer
     /**
      * {@inheritdoc}
      */
-    public function writeRows($rows)
+    public function writeRows(iterable $rows) : void
     {
-        if (!is_array($rows) && !$rows instanceof \Traversable) {
-            throw new Exception\InvalidArgumentException(sprintf(
-                '%s::writeRows expects an array or Traversable, got "%s"',
-                get_class($this),
-                is_object($rows) ? get_class($rows) : gettype($rows)
-            ));
-        }
-
         foreach ($rows as $row) {
             $this->writeRow($row);
         }

@@ -1,4 +1,5 @@
-<?php
+<?php declare(strict_types=1);
+
 /*
  * This file is part of pmg/csv-sugar.
  *
@@ -25,44 +26,44 @@ final class Dialect
     private $enclosure;
     private $escapeChar;
 
-    public function __construct($delimiter, $enclosure=null, $escapeChar=null)
+    public function __construct(string $delimiter, string $enclosure=null, string $escapeChar=null)
     {
         $this->delimiter = $delimiter;
-        $this->enclosure = null === $enclosure ? self::DEFAULT_ENCLOSURE : $enclosure;
-        $this->escapeChar = null === $escapeChar ? self::DEFAULT_ESCAPE : $escapeChar;
+        $this->enclosure = $enclosure ?? self::DEFAULT_ENCLOSURE;
+        $this->escapeChar = $escapeChar ?? self::DEFAULT_ESCAPE;
     }
 
-    public function getDelimiter()
+    public function getDelimiter() : string
     {
         return $this->delimiter;
     }
 
-    public function getEnclosure()
+    public function getEnclosure() : string
     {
         return $this->enclosure;
     }
 
-    public function getEscapeCharacter()
+    public function getEscapeCharacter() : string
     {
         return $this->escapeChar;
     }
 
-    public static function csv()
+    public static function csv() : self
     {
         return new self(',');
     }
 
-    public static function tsv()
+    public static function tsv() : self
     {
         return new self("\t");
     }
 
-    public static function tilde()
+    public static function tilde() : self
     {
         return new self('~');
     }
 
-    public static function pipe()
+    public static function pipe() : self
     {
         return new self('|');
     }

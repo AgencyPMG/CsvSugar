@@ -1,4 +1,5 @@
-<?php
+<?php declare(strict_types=1);
+
 /*
  * This file is part of pmg/csv-sugar.
  *
@@ -12,7 +13,10 @@ namespace PMG\CsvSugar\Exception;
 
 use PMG\CsvSugar\CsvException;
 
-final class UnexpectedValueException extends \UnexpectedValueException implements CsvException
+final class CouldNotOpenFile extends RuntimeException
 {
-
+    public static function wrap(\Throwable $e) : self
+    {
+        return new self($e->getMessage(), $e->getCode(), $e);
+    }
 }

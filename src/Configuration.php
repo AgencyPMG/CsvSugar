@@ -1,4 +1,5 @@
-<?php
+<?php declare(strict_types=1);
+
 /*
  * This file is part of pmg/csv-sugar.
  *
@@ -17,7 +18,7 @@ namespace PMG\CsvSugar;
  */
 trait Configuration
 {
-    public static function configureFileObject(\SplFileObject $fh, Dialect $dialect)
+    public static function configureFileObject(\SplFileObject $fh, Dialect $dialect) : void
     {
         $fh->setCsvControl(
             $dialect->getDelimiter(),

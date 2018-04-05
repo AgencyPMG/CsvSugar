@@ -10,6 +10,8 @@
 
 namespace PMG\CsvSugar;
 
+use PMG\CsvSugar\Exception\CouldNotOpenFile;
+
 class DictReaderTest extends TestCase
 {
     public static function dialects()
@@ -87,5 +89,55 @@ class DictReaderTest extends TestCase
         $this->assertEquals([
             ['one' => '1', 'two' => $restValue],
         ], iterator_to_array($reader));
+    }
+
+    /**
+     * @requires extension zip
+     */
+    public function testReaderCanReadFilesFromZipStreams()
+    {
+        $reader = DictReader::builder(sprintf(
+            'zip://%s/Fixtures/dictreader.zip#dictreader.csv',
+            __DIR__
+        ))->build();
+
+        $this->assertEquals([[
+            'one' => 1,
+            'two' => 2,
+        ]], iterator_to_array($reader));
+    }
+
+    public function testReaderErrorsWhenTheFileCannotBeOpened()
+    {
+        $this->expectException(CouldNotOpenFile::class);
+        $reader = DictReader::builder(__DIR__.'/does/not/exist')->build();
+
+        foreach ($reader as $row) {
+        }
+    }
+
+    public function testReaderSkipsEmptyLinesInOutput()
+    {
+        $reader = DictReader::builder(__DIR__.'/Fixtures/dictreader_with_empties.csv')->build();
+
+        $this->assertEquals([[
+            'one' => 1,
+            'two' => 2,
+        ]], iterator_to_array($reader));
+    }
+
+    public function testReaderCanBeUsedMoreThanOnce()
+    {
+        $reader = DictReader::builder(__DIR__.'/Fixtures/dictreader.csv')->build();
+
+        foreach ($reader as $row) {
+            // once
+        }
+
+        // twice
+        $this->assertEquals([[
+            'one' => 1,
+            'two' => 2,
+        ]], iterator_to_array($reader));
     }
 }

@@ -1,4 +1,5 @@
-<?php
+<?php declare(strict_types=1);
+
 /*
  * This file is part of pmg/csv-sugar.
  *
@@ -12,7 +13,7 @@ namespace PMG\CsvSugar\Exception;
 
 use PMG\CsvSugar\CsvException;
 
-final class RuntimeException extends \RuntimeException implements CsvException
+class RuntimeException extends \RuntimeException implements CsvException
 {
 
 }
