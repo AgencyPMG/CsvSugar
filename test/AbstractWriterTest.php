@@ -37,7 +37,7 @@ class AbstractWriterTest extends TestCase
         $this->writer->writeRows($rows);
     }
 
-    protected function setUp()
+    protected function setUp() : void
     {
         $this->writer = $this->getMockForAbstractClass(AbstractWriter::class);
     }

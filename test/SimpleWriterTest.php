@@ -80,7 +80,7 @@ class SimpleWriterTest extends TestCase
         $writer = new SimpleWriter(__DIR__.'/does/not/exist');
     }
 
-    protected function setUp()
+    protected function setUp() : void
     {
         $this->fs = vfsStream::setup('home');
     }

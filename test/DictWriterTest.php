@@ -11,6 +11,8 @@
 namespace PMG\CsvSugar;
 
 use org\bovigo\vfs\vfsStream;
+use PMG\CsvSugar\Exception\InvalidKeys;
+use PMG\CsvSugar\Exception\InvalidArgumentException;
 
 class DictWriterTest extends TestCase
 {
@@ -51,11 +53,10 @@ class DictWriterTest extends TestCase
         $this->assertFileEquals(__DIR__.'/Fixtures/'.$expectedFile, $file);
     }
 
-    /**
-     * @expectedException PMG\CsvSugar\Exception\InvalidKeys
-     */
     public function testWriteRowErrorsWhenAnInvalidKeyIsPassedInWithErrorInvalidTurnedOn()
     {
+        $this->expectException(InvalidKeys::class);
+
         $file = vfsStream::url('home/dictwriter');
         $writer = DictWriter::builder($file)
             ->withFields(['one', 'two'])
@@ -95,10 +96,11 @@ class DictWriterTest extends TestCase
 
     /**
      * @dataProvider badRows
-     * @expectedException PMG\CsvSugar\Exception\InvalidArgumentException
      */
     public function testWriteRowErrorsWhenGivenANonArrayOrAccessAccess($row)
     {
+        $this->expectException(InvalidArgumentException::class);
+
         $file = vfsStream::url('home/dictwriter');
         $writer = new DictWriter($file, null, ['one']);
 
@@ -130,7 +132,7 @@ class DictWriterTest extends TestCase
         $this->assertEquals("1\n", file_get_contents($file));
     }
 
-    protected function setUp()
+    protected function setUp() : void
     {
         $this->fs = vfsStream::setup('home');
     }

@@ -1,7 +1,7 @@
 /vendor
 /composer.lock
 /coverage
-
+.phpunit.result.cache
 *.pyc
 *.swp
 *.dmg
