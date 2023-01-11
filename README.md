@@ -5,16 +5,6 @@
 A few helpers to make reading and writing CSV (and other delimited files)
 a bit easier.
 
-## A Quick Note on Line Endings
-
-This library is a thin wrapper around `SplFileObject`, so all the caveats for
-using that come into play here. This includes line endings. Your best best may
-be to set `auto_detect_line_endings = On` in your `php.ini` or use...
-
-```php
-ini_set('auto_detect_line_endings', true)
-```
-
 ## Reading CSV
 
 ```php

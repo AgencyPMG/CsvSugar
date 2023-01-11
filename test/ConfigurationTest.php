@@ -12,11 +12,13 @@ namespace PMG\CsvSugar;
 
 class ConfigurationTest extends TestCase
 {
+    use Configuration;
+
     public function testConfigureFileObjectChangesTheCsvControlForTheFileObjectBaseOnDialect()
     {
         $dialect = new Dialect('|', "'");
         $fh = new \SplFileObject(__FILE__, 'r');
-        Configuration::configureFileObject($fh, $dialect);
+        self::configureFileObject($fh, $dialect);
 
         list($delimiter, $enclosure) = $fh->getCsvControl();
         $this->assertEquals('|', $delimiter);
