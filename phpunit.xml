@@ -8,7 +8,7 @@
          convertWarningsToExceptions="true"
          processIsolation="false"
          stopOnFailure="false"
-         bootstrap="test/bootstrap.php">
+         bootstrap="vendor/autoload.php">
 
     <testsuites>
         <testsuite name="unit">
@@ -22,5 +22,13 @@
         </include>
     </coverage>
 
+    <php>
+        <ini name="assert.exception" value="On"/>
+        <env name="SYMFONY_DEPRECATIONS_HELPER" value="max[self]=0"/>
+    </php>
+
+    <listeners>
+        <listener class="Symfony\Bridge\PhpUnit\SymfonyTestsListener"/>
+    </listeners>
 
 </phpunit>

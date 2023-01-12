@@ -11,6 +11,8 @@
 
 namespace PMG\CsvSugar;
 
+use Generator;
+
 /**
  * ABC for readers.
  *
@@ -34,11 +36,11 @@ abstract class AbstractReader implements \IteratorAggregate, Reader
         $this->dialect = $dialect ?: Dialect::csv();
     }
 
-    public function getIterator() : iterable
+    public function getIterator() : Generator
     {
         $fh = $this->openFile();
         try {
-            return $this->readFile($fh);
+            yield from $this->readFile($fh);
         } finally {
             @fclose($fh);
         }
