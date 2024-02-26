@@ -19,6 +19,8 @@ namespace PMG\CsvSugar;
  * }
  *
  * @since 1.0
+ *
+ * @deprecated This class is deprecated. Use [Alli\Platform\Util\Csv\Reader](https://github.com/AgencyPMG/alli-platform-sdk-php/blob/master/src/Util/Csv/Reader.php) instead.
  */
 interface Reader extends \Traversable
 {
