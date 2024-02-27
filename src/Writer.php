@@ -15,6 +15,8 @@ namespace PMG\CsvSugar;
  * Common interface for CSV writers.
  *
  * @since 1.0
+ *
+ * @deprecated This class is deprecated. Use [Alli\Platform\Util\Csv\Writer](https://github.com/AgencyPMG/alli-platform-sdk-php/blob/master/src/Util/Csv/Writer.php) instead.
  */
 interface Writer
 {
