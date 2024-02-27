@@ -3,7 +3,7 @@
 [![Build Status](https://travis-ci.org/AgencyPMG/CsvSugar.svg)](https://travis-ci.org/AgencyPMG/CsvSugar)
 
 :warning: **DEPRECATION NOTICE**: This project is no longer maintained and might not work as expected.
-Use [Alli Platform SDK for PHP](https://github.com/AgencyPMG/alli-platform-sdk-php/tree/master/src/Fixtures) instead.
+Use [Alli Platform SDK for PHP](https://github.com/AgencyPMG/alli-platform-sdk-php/tree/master/src/Util/Csv) instead.
 Check this migration guide for more information:
 [Migrating from PMG CsvSugar to Alli Platform SDK for PHP](https://agencypmg.atlassian.net/wiki/spaces/ALLISDK/pages/2996862986/Alli+Platform+SDK+0.36+Upgrade+Guide)
 
